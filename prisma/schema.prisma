@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Mark {
+  markID   Int     @id @default(autoincrement())
+  markName String
+  markLogo String
+  models   Model[]
+}
+
+model Model {
+  modelID   Int     @id @default(autoincrement())
+  modelName String
+  yearFrom  String
+  yearTo    String? // Nullable
+  markID    Int
+  mark      Mark    @relation(fields: [markID], references: [markID])
+  auto      Auto[]
+}
+
+model Auto {
+  autoID    Int      @id @default(autoincrement())
+  autoDescr String
+  descr     String
+  fuelType  String
+  cc_lit    String
+  valves    String
+  ps        String
+  pS_KW     String
+  period    String
+  engines   String
+  kritWert  String
+  favAuto   Boolean
+  modelID   Int
+  model     Model    @relation(fields: [modelID], references: [modelID])
+  Engine    Engine[]
+}
+
+model Engine {
+  id       Int    @id @default(autoincrement())
+  engineID Int
+  engine   String
+  autoID   Int
+  auto     Auto   @relation(fields: [autoID], references: [autoID])
+}
